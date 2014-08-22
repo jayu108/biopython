@@ -1,7 +1,7 @@
 import PyGithub
 import base64
 
-g_inst = PyGithub.BlockingBuilder().Login("jayu108", "park4408").Build()
+g_inst = PyGithub.BlockingBuilder().Login("jayu108", "123456").Build()
 user = g_inst.get_authenticated_user()
 
 print user.login
