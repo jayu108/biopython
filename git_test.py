@@ -1,53 +1,7 @@
-<pre class="brush:python;"> 
->>> import PyGithub
->>> g_inst = PyGithub.BlockingBuilder().Build()     # github instance 
->>> user = g_inst.get_user("jayu108")    # github id
->>> print user.name                 # github id 에 해당하는 이름 출력
-park
->>> repo = user.get_repo("biopython")   # github id 소유의 repository 이름
->>> print repo.stargazers_count
-0
->>> 
-</pre>
-
-
-
-<pre class="brush:python;"> 
-
-</pre>
-
-
-
-rr = user.get_repos()   # user 소유 repository 이름 모두 얻기.
-
-for repo in rr:
-	print repo.full_name   # repository 이름 출력
-	print repo.description   # repository 설명 -- README.md 내용
-
-	
-	
-gg = user.get_gists()   # user 소유 gist 이름 모두 얻기. (public만 ?)
-
-for gist in gg:
-	print gist.id     # gist id 출력
-
-	
-# http://jacquev6.github.io/PyGithub/v2/reference/classes/User.html#PyGithub.Blocking.User.User.update
-user.update()    # user 정보 갱신
-
-print user.email   # github 에 등록한 e-mail 출력.
-
-print user.html_url  # 사용자 github url 출력.
-
-
-
-
-****** 사용자 본인 인증 접속하기 ******
-
 import PyGithub
 import base64
 
-g_inst = PyGithub.BlockingBuilder().Login("jayu108", "1234678").Build()
+g_inst = PyGithub.BlockingBuilder().Login("jayu108", "park4408").Build()
 user = g_inst.get_authenticated_user()
 
 print user.login
@@ -91,7 +45,7 @@ for repo in rr:
 ##                        print c.html_url                        
 ##        except :
 ##                print '-- no contents --'
-##        # x.creator
+        # x.creator
         print
 
 
@@ -102,6 +56,65 @@ for repo in rr:
 # user.create_repo('test_bio11', 'test bio 11')   # create new repository !!
 
 
+repo1 , repo2 = rr[0] , rr[1]
 
+print repo1
+print repo2
+print repo1.full_name
+print repo2.full_name
+
+
+print 'before => ', repo2.description
+
+# repository name , description 변경
+# https://developer.github.com/v3/repos/#edit
+# http://jacquev6.github.io/PyGithub/v2/reference/classes/Repository.html#PyGithub.Blocking.Repository.Repository.edit
+repo2.edit( name = 'test_bio22', description = 'test repo edit 333..')  
+print 'after => ', repo2.description
+print
+
+
+cm = repo1.get_commits() # PaginatedList of Commit
+cmt = repo1.get_commit_comments()  # comments list
+
+print cm
+print cmt
+
+print ' ******************************************************* '
+
+for commit in cm:
+    ##    print'  commit -- ', commit
+    ##    commit.files     # list of files
+    ##    sts = commit.get_statuses()  # PaginatedList of Commit.Status
+    ##    print 'sts -- ', sts
+    ##    # print ' len of sts == ', len(sts)
+    ##    for st in sts:
+    ##        print '.....'
+    ##        print st
+    ##        print 'commit status  ==> ', st.created_at, st.updated_at, st.description
+    for x in commit.files:
+        # print x      # file object
+        print x.filename , x.changes, x.status, x.sha
+        
+    print '  -------- '
+
+print ' ******************************************************* '
+
+
+for comment in cmt:  # ???????
+    print comment
+
+
+# http://jacquev6.github.io/PyGithub/v2/reference/classes/Repository.html#PyGithub.Blocking.Repository.Repository.create_file
+# 현재 repository (repo1) 에 , directroy 명 'dir_name' 아래 'test.txt' 라는
+# 파일을 만드는데, 그 파일 내용은 base64로 인코딩된 'ZGF0YSB0byBiZSBlbmNvZGVk' 이다.
+repo1.create_file('dir_name/test.txt', '1st create file test','ZGF0YSB0byBiZSBlbmNvZGVk')
+
+
+
+with open('tt.py') as f:
+    
+
+    
 
 
